@@ -18,3 +18,4 @@ delivery_date = '2024-05-25' # yyyy-MM-dd format
 nordPoolAPI = NordPoolClass(config.username, config.password, config.sub_key) # initialise the API connection
 # df = nordPoolAPI.dayAheadData(startDate, endDate) # Timestamp in output dataframe relates to the start of the time period
 df_v2 = nordPoolAPI.UKdayAheadPricesV2(delivery_date)
+

@@ -25,8 +25,7 @@ class NordPoolClass:
         self.mySession = requests.Session()
         self.subKey = sub_key
         
-        self.set_new_authentication_token()
-        
+        self.set_new_authentication_token()   
         
     def set_new_authentication_token(self):
         """
@@ -57,7 +56,11 @@ class NordPoolClass:
 
         except requests.exceptions.RequestException as err:
             print(err)
-            
+
+    
+    def check_authentication_token(self):
+        if datetime.datetime.now() > self.token_expiration:
+            self.set_new_authentication_token()
 
     def apiResponse(self, host, payload, headers):
 
@@ -119,9 +122,7 @@ class NordPoolClass:
         """
 
         # Authenticate and assign token if required
-        if datetime.datetime.now() > self.token_expiration:
-            self.set_new_authentication_token()
-        
+        self.check_authentication_token()
         
         host = 'https://data-api.nordpoolgroup.com/api/v2/Auction/Prices/ByAreas?'
         payload = {
@@ -147,19 +148,29 @@ class NordPoolClass:
         
         return df
     
-    # def UkdayAheadPriceCurve(
-    #         self,
-    #         delivery_date: str # delivery CET date, yyyy-MM-dd format e.g. 2024-01-21
-    #         ):
+    def UkdayAheadPriceCurve(
+            self,
+            delivery_date: str # delivery CET date, yyyy-MM-dd format e.g. 2024-01-21
+            ):
         
-    #     host = 'https://data-api.nordpoolgroup.com/api/v2/Auction/N2EX_DayAhead/PriceCurves/UK?'
+        self.check_authentication_token()
+        
+        host = 'https://data-api.nordpoolgroup.com/api/v2/Auction/N2EX_DayAhead/PriceCurves/UK?'
+        payload = {
+            'date': delivery_date
+            }
+        
+        headers = {
+            "Accept-Encoding": '',
+            "Ocp-Apim-Subscription-Key": self.subKey,
+            "Authorization": "Bearer " + self.token
+            }
+        
+        response = self.apiResponse(host, payload, headers)
+        
+        order_positions = response.json()['orderPositions'] # list of 24 dicts for demand/supply curves for each hour
         
         
-        
-        
-        
-        
-        
-        
+        return order_positions
         
         
