@@ -88,12 +88,13 @@ class NordPoolClass:
         response = self.apiResponse(host, payload, headers)
         hourly_prices = response.json()[0]['values'] # dictionary of hourly prices
         
-        df = pd.DataFrame()
-        for entry in hourly_prices:
-            df = df.append([[entry['startTime'], entry['value']]])
-        df.columns = ['Timestamp','Price (GBP/MWh)']
+        df = pd.DataFrame(
+            data = {
+                'Timestamp': [x['startTime'] for x in hourly_prices],
+                'Price (GBP/MWh)': [x['value'] for x in hourly_prices]          
+                }
+            )
         
         return df
-    
 
         
