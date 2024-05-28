@@ -67,7 +67,7 @@ class NordPoolClass:
         try:
             response = self.mySession.get(host, params = payload, headers = headers) 
             if response.status_code == 200:
-                print('Request successful! Data received.')
+                # print('Request successful! Data received.')
                 return response
             else:
                 print('Request failed, status code: %s' % response.status_code)

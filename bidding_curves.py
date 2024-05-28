@@ -57,8 +57,8 @@ delivery_date = '2024-05-25' # yyyy-MM-dd format
 
 nordPoolAPI = NordPoolClass(config.username, config.password, config.sub_key) # initialise the API connection
 order_positions = nordPoolAPI.UkdayAheadPriceCurve(delivery_date) # list of dicts for supply/demand curves at each hour of the day
-plot_supply_demand_curves(order_positions, hour_to_plot = 9)
-plot_supply_demand_curves(order_positions, hour_to_plot = 9, xlims = [9000,11000], ylims=[0,400])
+plot_supply_demand_curves(order_positions, hour_to_plot = 19)
+plot_supply_demand_curves(order_positions, hour_to_plot = 19, xlims = [9000,12000], ylims=[0,400])
 
 
 
