@@ -75,40 +75,6 @@ class NordPoolClass:
         except requests.exceptions.RequestException as err:
             print(err)
             sys.exit(0)
-            
-    
-    # def dayAheadData(self, startDate, endDate):
-        
-    #     print('This function is deprecated please use another.')
-        
-    #     # Authenticate and assign token if required
-    #     if datetime.datetime.now() > self.token_expiration:
-    #         self.set_new_authentication_token()
-        
-    #     # change string dates to ISO datetime
-    #     startTime = strDate2iso(startDate)
-    #     endTime = strDate2iso(endDate)
-        
-    #     # change the below 'host' 'payload' and 'headers' to access different parts of the API found here - https://marketdata.nordpoolgroup.com/docs/services/MarketData-UK-v2/operations/UkAreaBlockPrices 
-    #     host = "https://marketdata-api.nordpoolgroup.com/uk/v2/n2ex/prices/area?" 
-    #     payload = {"startTime": startTime,
-    #                "endTime": endTime}
-    #     headers = {"Accept-Encoding": '',
-    #                 "Ocp-Apim-Subscription-Key": self.subKey,
-    #                 "Authorization": "Bearer " + self.token}
-        
-    #     # get response object from API
-    #     response = self.apiResponse(host, payload, headers)
-    #     hourly_prices = response.json()[0]['values'] # dictionary of hourly prices
-        
-    #     df = pd.DataFrame(
-    #         data = {
-    #             'Timestamp': [x['startTime'] for x in hourly_prices],
-    #             'Price (GBP/MWh)': [x['value'] for x in hourly_prices]          
-    #             }
-    #         )
-        
-    #     return df
     
     
     def UKdayAheadPricesV2(
@@ -147,6 +113,22 @@ class NordPoolClass:
             )
         
         return df
+    
+    def get_day_ahead_prices(
+            self,
+            start_date: str, # YYYY-mm-dd format
+            end_date: str, # YYYY-mm-dd format
+            ):
+        
+        query_dates = pd.date_range(start_date, end_date, freq='D')
+        delivery_dates = [x.strftime('%Y-%m-%d') for x in query_dates]
+        
+        results = []
+        for delivery_date in delivery_dates:
+            results.append(self.UKdayAheadPricesV2(delivery_date))
+            
+        return pd.concat(results, axis=0)
+        
     
     def UkdayAheadPriceCurve(
             self,
