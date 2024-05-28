@@ -127,7 +127,7 @@ class NordPoolClass:
         for delivery_date in delivery_dates:
             results.append(self.UKdayAheadPricesV2(delivery_date))
             
-        return pd.concat(results, axis=0)
+        return pd.concat(results, axis=0).reset_index(drop=True)
         
     
     def UkdayAheadPriceCurve(
